@@ -69,6 +69,8 @@ export interface RequireDirectoryOptions {
   extensions?: ReadonlyArray<string>;
   visit?: (commandObject: any, pathToFile: string, filename?: string) => any;
   recurse?: boolean;
+  include?: RegExp | ((fileName: string) => boolean);
+  exclude?: RegExp | ((fileName: string) => boolean);
 }
 
 // Dependencies that might vary between CJS, ESM, and Deno are isolated:
@@ -104,6 +106,7 @@ export interface PlatformShim {
     dirname: (path: string) => string;
     relative: (p1: string, p2: string) => string;
     resolve: (p1: string, p2: string) => string;
+    join: (p1: string, p2: string) => string;
   };
   process: {
     argv: () => string[];
@@ -115,6 +118,10 @@ export interface PlatformShim {
     stdColumns: number | null;
   };
   readFileSync: (path: string, encoding: string) => string;
+  readdirSync: (
+    path: string,
+    opts: object
+  ) => Array<string | Buffer<ArrayBufferLike>>[];
   require: RequireType;
   y18n: Y18N;
 }

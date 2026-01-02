@@ -18,7 +18,7 @@ export function applyExtends(
     let pathToDefault: string | null = null;
     if (!isPath) {
       try {
-        pathToDefault = require.resolve(config.extends);
+        pathToDefault = import.meta.resolve(config.extends);
       } catch (_err) {
         // maybe the module uses key for some other reason,
         // err on side of caution.
@@ -34,7 +34,7 @@ export function applyExtends(
 
     defaultConfig = isPath
       ? JSON.parse(shim.readFileSync(pathToDefault, 'utf8'))
-      : require(config.extends);
+      : _shim.require(config.extends);
     delete config.extends;
     defaultConfig = applyExtends(
       defaultConfig,
